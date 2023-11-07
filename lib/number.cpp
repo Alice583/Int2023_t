@@ -1,6 +1,6 @@
 #include "number.h"
 
-char numberr[10] = {'0','1', '2', '3', '4', '5', '6', '7', '8', '9', };
+char arr_num[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',};
 
 
 int2023_t from_int(int32_t i) {
@@ -24,18 +24,15 @@ int2023_t from_int(int32_t i) {
 }
 
 int2023_t from_string(const char *buff) {
-    int2023_t int2023;
-    for (int num = 0; num <= 252; num++) {
-        int2023.number[num] = '0';
-    }
+    int2023_t int2023 = from_int(0);
     int num_str = 0;
+    int index = 252;
     for (int i = 0; i < 254; ++i) {
         if (buff[num_str] == '\0') {
             break;
         }
         num_str++;
     }
-    int index = 252;
     if (buff[0] == '-') {
         int2023.number[0] = '-';
         for (int i = num_str - 1; i > 0; --i) {
@@ -54,8 +51,6 @@ int2023_t from_string(const char *buff) {
     } else if (buff[0] == '-') {
         int2023.number[0] = '-';
     }
-
-
     return int2023;
 }
 
@@ -140,7 +135,6 @@ int2023_t operator+(const int2023_t &lhs, const int2023_t &rhs) {
             int2023.number[0] = lhs.number[0];
         }
     }
-
     return int2023;
 }
 
@@ -267,6 +261,7 @@ int2023_t operator/(const int2023_t &lhs, const int2023_t &rhs) {
     int2023_t int2023 = from_int(0);
     int index_left_num;
     int index_right_num;
+    int flag_rhs_digit;
     for (index_left_num = 1; index_left_num <= 252; index_left_num++) {
         if (lhs.number[index_left_num] != '0') {
             break;
@@ -277,7 +272,7 @@ int2023_t operator/(const int2023_t &lhs, const int2023_t &rhs) {
             break;
         }
     }
-    if (lhs == from_int(0) || rhs == from_int(0)){
+    if (lhs == from_int(0) || rhs == from_int(0)) {
         return int2023;
     }
 
@@ -289,7 +284,6 @@ int2023_t operator/(const int2023_t &lhs, const int2023_t &rhs) {
     if (rhs == from_int(1)) {
         return lhs;
     }
-    int flag_rhs_digit;
     if (rhs.number[index_right_num] <= lhs.number[index_left_num]) {
         flag_rhs_digit = 0;
     } else {
@@ -318,12 +312,11 @@ int2023_t operator/(const int2023_t &lhs, const int2023_t &rhs) {
         }
         remainder = temp - (divider * from_int(num_pos - 1));
         if (temp_sign == '+') {
-            result[res_digit] = numberr[num_pos - 1];
+            result[res_digit] = arr_num[num_pos - 1];
         } else {
             result[res_digit] = '0';
         }
         res_digit++;
-
         for (int j = 2; j < 253; j++) {
             remainder.number[j - 1] = remainder.number[j];
         }
@@ -333,12 +326,6 @@ int2023_t operator/(const int2023_t &lhs, const int2023_t &rhs) {
     for (int i = 0; i < result_length; i++) {
         int2023.number[254 - result_length + i - 1] = result[i];
     }
-
-//    if (lhs.number[0] != rhs.number[0]) {
-//        int2023.number[0] = '-';
-//    } else {
-//        int2023.number[0] = '+';
-//    }
     if ((CheckSignPlus(lhs.number[0]) && CheckSignPlus(rhs.number[0])) ||
         (!CheckSignPlus(lhs.number[0]) && !CheckSignPlus(rhs.number[0]))) {
         int2023.number[0] = '+';
